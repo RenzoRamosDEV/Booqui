@@ -1,0 +1,105 @@
+
+CREATE DATABASE user;
+
+USE user;
+
+CREATE TABLE users (
+    id_user BIGINT AUTO_INCREMENT PRIMARY KEY,
+    contact_email VARCHAR(100) NOT NULL,
+    contact_phone VARCHAR(15),
+    date_of_birth DATE,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('ADMIN','CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
+
+    UNIQUE (contact_email)
+);
+
+INSERT INTO users (first_name, last_name, date_of_birth, contact_phone, contact_email, password, role) VALUES
+('Mel', 'Admin', '2003-06-15', '631835827', 'mel@booqi.com', 'admin_mel', 'ADMIN'),
+('Renzo', 'Admin', '2004-09-18', '623971177', 'renzo@booqi.com', 'admin_renzo', 'ADMIN'),
+('Andrea', 'Rodriguez', '14-04-2004', '678123321', 'andrea.r@gmail.com', 'cust_pass_4', 'CUSTOMER'),
+('Joshua', 'García', '1992-03-12', '611222333', 'andres.g@email.com', 'cust_pass_1', 'CUSTOMER'),
+('Beatriz', 'López', '1995-07-23', '622333444', 'beatriz.l@email.com', 'cust_pass_2', 'CUSTOMER'),
+('Carlos', 'Martínez', '2001-11-02', '633444555', 'carlos.m@email.com', 'cust_pass_3', 'CUSTOMER');
+
+CREATE DATABASE event;
+
+USE event;
+
+CREATE TABLE events (
+    id_event BIGINT AUTO_INCREMENT PRIMARY KEY,
+    available_tickets INT,
+    category VARCHAR(50),
+    contact_email VARCHAR(100),
+    contact_phone VARCHAR(15),
+    description VARCHAR(2000),
+    end_date DATETIME(6),
+    location VARCHAR(200),
+    organized VARCHAR(100),
+    price DOUBLE,
+    start_date DATETIME(6),
+    title VARCHAR(200),
+    url_image VARCHAR(500)
+);
+
+INSERT INTO events (title, description, available_tickets, location, start_date, end_date, organized, price, category, contact_email, contact_phone, url_image) VALUES
+('Bad Bunny: DeBÍ TiRAR MáS FOToS World Tour', 'El regreso del Bad Bunny a los escenarios con su gira mundial más ambiciosa.', 150, 'Estadio Riyadh Air Metropolitano, Madrid', '2026-05-30 20:00:00', '2026-05-30 23:30:00', 'Live Nation España', 73.30, 'Música', 'info@livenation.es', '911217353', 'https://www.objetivoreggaeton.com/wp-content/uploads/2025/01/bad-bunny-rinde-homenaje-a-puerto-rico-con-su-espectacular-album-debi-tirar-mas-fotos.jpg'),
+('Festival de Food Trucks', 'Gastronomía sobre ruedas y música en vivo.', 15, 'Recinto Ferial, Alcorcón', '2026-05-10 12:00:00', '2026-05-10 23:00:00', 'Asociación Foodies Madrid', 45.0, 'Gastronomía', 'contacto@foodtruckfest.com', '910000001', 'https://gentleman.elperiodico.com/wp-content/uploads/2024/05/legislacion-espanola-permite-callejera-Marabilias_804829576_1898582_1020x574.webp'),
+('Clases de Baile de Salón', 'Pasos básicos de salsa, bachata y tango.', 8, 'Centro Cultural, Alcorcón', '2026-04-01 18:00:00', '2026-04-01 20:00:00', 'Ritmo y Sabor', 35.0, 'Deportes', 'baile@alcorcon.es', '910000002', 'https://www.mushi-emd.com/wp-content/uploads/2019/02/clases-de-bailes-de-salon-madrid-retiro.jpg'),
+('Obra de Teatro: La Espera', 'Drama contemporáneo sobre relaciones humanas.', 4, 'Teatro Gran Vía, Madrid', '2026-03-20 20:30:00', '2026-03-20 22:30:00', 'Producciones Escénicas S.L.', 40.0, 'Cultura', 'tickets@teatro.com', '910000003', 'https://www.elcorteingles.es/entradas/blog/app/uploads/2022/07/teatro.jpg'),
+('Yoga al Aire Libre', 'Sesión matutina de Hatha Yoga.', 12, 'Parque Solidaridad, Fuenlabrada', '2026-06-15 09:00:00', '2026-06-15 10:30:00', 'Yoga Life', 25.0, 'Salud', 'info@yogalife.com', '910000004', 'https://tupungatovalley.com/wp-content/uploads/2023/06/mujeres-haciendo-yoga-naturaleza.jpg'),
+('Concierto de Jazz Clásico', 'Cuarteto de jazz interpretando estándares.', 6, 'Club de Jazz, Embajadores', '2026-03-25 21:00:00', '2026-03-25 23:30:00', 'Jazz Club Madrid', 55.0, 'Música', 'reservas@jazzclub.com', '910000005', 'https://estaticos-cdn.prensaiberica.es/clip/e4d2ed39-fe3e-40ac-83bc-a972b9496baa_16-9-aspect-ratio_default_0.jpg'),
+('Taller de Canto Moderno', 'Mejora tu técnica vocal y miedo escénico.', 5, 'Academia Música, Atocha', '2026-04-12 17:00:00', '2026-04-12 19:00:00', 'Voz Viva', 27.0, 'Educación', 'hola@vozviva.com', '910000006', 'https://www.shinemusicschool.es/wp-content/uploads/2022/09/7-1.png'),
+('Conferencia Tech: AI 2026', 'Tendencias en Inteligencia Artificial.', 20, 'Auditorio Business, Gran Vía', '2026-09-10 10:00:00', '2026-09-10 18:00:00', 'Madrid Tech', 20.0, 'Tecnología', 'eventos@madridtech.com', '910000007', 'https://msftstories.thesourcemediaassets.com/sites/41/2023/03/image00016-960x640.jpeg'),
+('Festival Country', 'El mejor sonido Nashville en Madrid.', 30, 'Plaza Mayor, Ciudad Lineal', '2026-07-04 19:00:00', '2026-07-04 23:59:00', 'Country Spain', 26.0, 'Música', 'info@countryspain.com', '910000008', 'https://www.shutterstock.com/image-photo/audience-huercasa-country-festival-2017-600nw-2486053773.jpg'),
+('Cata de Vinos y Quesos', 'Degustación guiada con maridaje premium.', 10, 'Bodega Urbana, Chamberí', '2026-05-22 20:00:00', '2026-05-22 22:00:00', 'Sommelier Events', 30.0, 'Gastronomía', 'catas@bodega.com', '910000009', 'https://cellercanroda.cat/wp-content/uploads/2020/09/Cata-vinos-y-quesos-scaled.jpg'),
+('Maratón Fotográfico', 'Captura la esencia de la ciudad.', 25, 'Puerta del Sol, Madrid', '2026-10-05 08:00:00', '2026-10-05 20:00:00', 'Foto Club Madrid', 15.0, 'Arte', 'concurso@fotoclub.com', '910000010', 'https://www.dresden-marathon.com/wp-content/uploads/2019/05/nw_181021_12_10_42-1.jpg'),
+('Exposición de Arte Moderno', 'Artistas emergentes europeos.', 18, 'Galería de Arte, Malasaña', '2026-03-01 11:00:00', '2026-03-30 21:00:00', 'Art Colective', 10.0, 'Cultura', 'expo@artcolective.com', '910000011', 'https://i.blogs.es/9c240e/view_faux_rocks_2006_katharina_grosse_foto.david_diaz/500_333.jpeg'),
+('Torneo Padel Solidario', 'Compite por una buena causa.', 16, 'Polideportivo, Getafe', '2026-04-18 09:00:00', '2026-04-19 18:00:00', 'Getafe Solidario', 20.0, 'Deportes', 'padel@getafe.es', '910000012', 'https://www.lta.org.uk/49614e/globalassets/padel-play/adults/padel-players-on-court-rules.jpg'),
+('Curso Cocina Japonesa', 'Sushi, ramen y gyoza desde cero.', 7, 'Kitchen Lab, Chueca', '2026-02-28 10:00:00', '2026-02-28 14:00:00', 'Master Chef', 60.0, 'Gastronomía', 'cursos@kitchenlab.com', '910000013', 'https://picofinoescuelamalaga.com/wp-content/uploads/2025/09/taller-de-sushi.webp'),
+('Noche de Monólogos', 'Risas con los mejores cómicos.', 9, 'Sala Comedy, La Latina', '2026-03-14 22:30:00', '2026-03-15 00:00:00', 'Risas Madrid', 18.0, 'Cultura', 'info@risasmadrid.com', '910000014', 'https://www.valenciaextra.com/uploads/s1/16/35/23/13/publico-en-un-monologo-de-gran-fira-valencia.jpeg'),
+('Programación para Niños', 'Introducción a la lógica con Scratch.', 14, 'Biblioteca Retiro, Madrid', '2026-05-02 11:00:00', '2026-05-02 13:00:00', 'Future Coders', 0.0, 'Educación', 'kids@futurecoders.com', '910000015', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSReN_pJGxq3mLVTibwgRyMyhf22zLuAArPQQ&s');
+
+CREATE DATABASE booking;
+
+USE booking;
+
+CREATE TABLE bookings (
+    booking_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    base_price DECIMAL(10,2),
+    event_description TEXT,
+    event_id BIGINT,
+    event_location VARCHAR(255),
+    event_start_date DATETIME(6),
+    event_title VARCHAR(200),
+    purchase_date DATETIME(6),
+    status VARCHAR(50),
+    ticket_quantity INT,
+    total_price DECIMAL(10,2),
+    user_email VARCHAR(150),
+    user_first_name VARCHAR(100),
+    user_id BIGINT,
+    user_last_name VARCHAR(100)
+);
+
+CREATE DATABASE payment;
+
+USE payment;
+
+CREATE TABLE payments (
+    payment_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    booking_id BIGINT,
+    creation_date DATETIME(6),
+    error_message VARCHAR(500),
+    event_id BIGINT,
+    payment_date DATETIME(6),
+    payment_method VARCHAR(50),
+    status VARCHAR(20),
+    ticket_quantity INT,
+    total_price DECIMAL(10,2),
+    transaction_id VARCHAR(100),
+    user_id BIGINT
+);
+

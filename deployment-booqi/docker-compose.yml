@@ -1,0 +1,162 @@
+services:
+  # ===========================================
+  # MySQL Database Service
+  # ===========================================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-booking-system
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-admin}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./001_init_database.sql:/docker-entrypoint-initdb.d/001_init_database.sql
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 60s
+    networks:
+      - booking-network
+
+  # ===========================================
+  # User Service
+  # ===========================================
+  user-service:
+    build:
+      context: ../user
+      dockerfile: Dockerfile
+    container_name: user-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL_USER: jdbc:mysql://mysql:3306/user
+      DB_USERNAME_USER: ${MYSQL_USER:-root}
+      DB_PASSWORD_USER: ${MYSQL_ROOT_PASSWORD:-admin}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - booking-network
+
+  # ===========================================
+  # Event Service
+  # ===========================================
+  event-service:
+    build:
+      context: ../event
+      dockerfile: Dockerfile
+    container_name: event-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      DB_URL_EVENT: jdbc:mysql://mysql:3306/event
+      DB_USERNAME_EVENT: ${MYSQL_USER:-root}
+      DB_PASSWORD_EVENT: ${MYSQL_ROOT_PASSWORD:-admin}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - booking-network
+
+  # ===========================================
+  # Booking Service
+  # ===========================================
+  booking-service:
+    build:
+      context: ../booking
+      dockerfile: Dockerfile
+    container_name: booking-service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL_BOOKING: jdbc:mysql://mysql:3306/booking
+      DB_USERNAME_BOOKING: ${MYSQL_USER:-root}
+      DB_PASSWORD_BOOKING: ${MYSQL_ROOT_PASSWORD:-admin}
+      SERVICE_USER_URL: http://user-service:8080/api/users
+      SERVICE_EVENT_URL: http://event-service:8081/api/events
+    depends_on:
+      mysql:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+      event-service:
+        condition: service_started
+    networks:
+      - booking-network
+
+  # ===========================================
+  # Payment Service
+  # ===========================================
+  payment-service:
+    build:
+      context: ../payment
+      dockerfile: Dockerfile
+    container_name: payment-service
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      DB_URL_PAYMENT: jdbc:mysql://mysql:3306/payment
+      DB_USERNAME_PAYMENT: ${MYSQL_USER:-root}
+      DB_PASSWORD_PAYMENT: ${MYSQL_ROOT_PASSWORD:-admin}
+      SERVICE_BOOKING_URL: http://booking-service:8082/api/bookings
+      SERVICE_EVENT_URL: http://event-service:8081/api/events
+    depends_on:
+      mysql:
+        condition: service_healthy
+      booking-service:
+        condition: service_started
+      event-service:
+        condition: service_started
+    networks:
+      - booking-network
+
+  service-links:
+    image: alpine:3.18
+    container_name: service-links
+    restart: "no"
+    volumes:
+      - ./service-links.sh:/service-links.sh:ro
+    entrypoint: ["/bin/sh", "-c", "/service-links.sh"]
+    networks:
+      - booking-network
+
+  # ===========================================
+  # Frontend
+  # ===========================================
+  front-service:
+    build:
+      context: ../front
+      dockerfile: Dockerfile
+    container_name: front-service
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+      - event-service
+      - booking-service
+      - payment-service
+    networks:
+      - booking-network
+
+# ===========================================
+# Networks
+# ===========================================
+networks:
+  booking-network:
+    driver: bridge
+
+# ===========================================
+# Volumes
+# ===========================================
+volumes:
+  mysql-data:
+    driver: local

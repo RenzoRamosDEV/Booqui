@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* layout raíz con padding-top para no tapar el navbar fijo */
+.adm-root {
+  font-family: 'DM Sans', sans-serif; color: #1a1a1a;
+  background: #fafaf9; min-height: 100vh; display: flex;
+  padding-top: 68px;
+}
+
+/* sidebar claro — ya no es oscuro, encaja con el navbar blanco */
+.adm-sidebar {
+  width: 220px; background: #ffffff; min-height: calc(100vh - 68px);
+  display: flex; flex-direction: column; padding: 1.5rem 0;
+  position: fixed; top: 68px; left: 0; bottom: 0; z-index: 50;
+  border-right: 1px solid #f0f0f0;
+}
+
+.adm-sidebar-label {
+  font-size: 0.65rem; font-weight: 600; color: #bbb;
+  text-transform: uppercase; letter-spacing: 2px;
+  padding: 0 1.25rem; margin-bottom: 0.4rem; margin-top: 1rem;
+}
+
+/* items del sidebar con hover suave morado */
+.adm-sidebar-item {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.65rem 1.25rem; color: #666;
+  font-size: 0.88rem; font-weight: 400; cursor: pointer;
+  transition: all 0.2s; border: none; background: none;
+  width: 100%; text-align: left; font-family: 'DM Sans', sans-serif;
+  text-decoration: none; border-left: 3px solid transparent;
+}
+.adm-sidebar-item:hover { color: #7c3aed; background: #f5f0ff; }
+
+/* item activo con acento a la izquierda */
+.adm-sidebar-item.active {
+  color: #7c3aed; background: #f5f0ff;
+  border-left: 3px solid #7c3aed; font-weight: 500;
+}
+.adm-sidebar-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* botón de cerrar sesión al fondo */
+.adm-sidebar-bottom { margin-top: auto; padding: 0 1.25rem; }
+.adm-logout-btn {
+  width: 100%; padding: 0.65rem 1rem;
+  background: #fff2f2; color: #ef4444;
+  border: 1px solid #fecaca; border-radius: 8px;
+  font-size: 0.85rem; font-family: 'DM Sans', sans-serif; cursor: pointer;
+  transition: all 0.2s;
+}
+.adm-logout-btn:hover { background: #fee2e2; }
+
+/* contenido principal desplazado para dejar sitio al sidebar */
+.adm-main { margin-left: 220px; flex: 1; padding: 2rem 2.5rem; }
+
+/* topbar con título y usuario conectado */
+.adm-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.adm-topbar h1 { font-family: 'Playfair Display', serif; font-size: 1.7rem; }
+.adm-topbar-user { font-size: 0.85rem; color: #888; }
+.adm-topbar-user span { color: #7c3aed; font-weight: 600; }
+
+/* grid de 4 tarjetas de estadísticas */
+.adm-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+.adm-stat {
+  background: #fff; border: 1px solid #f0f0f0; border-radius: 12px;
+  padding: 1.4rem; display: flex; flex-direction: column; gap: 0.4rem;
+}
+.adm-stat-label { font-size: 0.78rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+.adm-stat-value { font-size: 2rem; font-weight: 700; color: #1a1a1a; }
+.adm-stat-sub { font-size: 0.75rem; color: #bbb; }
+.adm-stat-icon { font-size: 1.4rem; margin-bottom: 0.2rem; }
+
+/* pestañas de usuarios / eventos */
+.adm-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+.adm-tab {
+  padding: 0.5rem 1.2rem; border-radius: 8px; font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer;
+  border: 1.5px solid #e5e5e5; background: #fff; color: #666;
+  transition: all 0.2s;
+}
+.adm-tab:hover { border-color: #7c3aed; color: #7c3aed; }
+.adm-tab.active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+
+/* tarjeta contenedora de cada tabla */
+.adm-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; overflow: hidden; }
+.adm-card-header {
+  padding: 1.1rem 1.5rem; border-bottom: 1px solid #f5f5f5;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.adm-card-header h2 { font-size: 1rem; font-weight: 600; }
+.adm-card-count { font-size: 0.8rem; color: #aaa; background: #f5f5f5; padding: 3px 10px; border-radius: 12px; }
+
+/* tabla de datos */
+.adm-table { width: 100%; border-collapse: collapse; }
+.adm-table th {
+  padding: 0.75rem 1.5rem; text-align: left; font-size: 0.72rem;
+  font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px;
+  background: #fafaf9; border-bottom: 1px solid #f0f0f0;
+}
+.adm-table td {
+  padding: 0.85rem 1.5rem; font-size: 0.88rem; color: #444;
+  border-bottom: 1px solid #f7f7f7;
+}
+.adm-table tr:last-child td { border-bottom: none; }
+.adm-table tr:hover td { background: #fafaf9; }
+
+/* badges de rol */
+.adm-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
+.adm-badge-admin { background: #f0e6ff; color: #7c3aed; }
+.adm-badge-customer { background: #f0fdf4; color: #16a34a; }
+
+/* botón eliminar, rojo solo en hover */
+.adm-delete-btn {
+  background: none; border: none; cursor: pointer; color: #ddd;
+  font-size: 0.8rem; padding: 4px 8px; border-radius: 6px;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.adm-delete-btn:hover { background: #fef2f2; color: #ef4444; }
+
+/* skeletons de carga */
+.adm-loading { padding: 2rem; }
+.adm-skeleton {
+  background: linear-gradient(90deg, #f5f5f5 25%, #ededed 50%, #f5f5f5 75%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite;
+  height: 14px; border-radius: 4px; margin: 0.4rem 0;
+}
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* en móvil el sidebar desaparece */
+@media (max-width: 900px) {
+  .adm-sidebar { display: none; }
+  .adm-main { margin-left: 0; padding: 1.5rem; }
+  .adm-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* badges de estado para pagos — se suman a los que ya existían */
+.adm-badge-approved { background: #f0fdf4; color: #16a34a; }
+.adm-badge-rejected { background: #fff2f2; color: #ef4444; }
+.adm-badge-pending  { background: #fffbeb; color: #d97706; }
+
+/* resumen de totales al pie de la tabla de ventas */
+.adm-sales-summary {
+  display: flex; gap: 0; border-top: 1px solid #f0f0f0;
+}
+.adm-sales-sum-item {
+  flex: 1; display: flex; justify-content: space-between; align-items: center;
+  padding: 0.9rem 1.5rem; font-size: 0.85rem;
+}
+.adm-sales-sum-item + .adm-sales-sum-item { border-left: 1px solid #f0f0f0; }
+.adm-sales-sum-item strong { font-size: 1rem; font-weight: 700; }
+.adm-sum-approved { color: #16a34a; background: #f9fefb; }
+.adm-sum-pending  { color: #d97706; background: #fffdf5; }
+.adm-sum-rejected { color: #ef4444; background: #fffafa; }
+
+/* ─── AÑADIR AL FINAL DE AdminStyle.css ─────────────────────────────────────
+   Estilos para los botones de exportación de informes PDF
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Contenedor de controles de la cabecera de ventas */
+.adm-sales-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Select de filtro por evento */
+.adm-event-select {
+  padding: 4px 10px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  color: #555;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.adm-event-select:hover,
+.adm-event-select:focus { border-color: #7c3aed; outline: none; }
+
+/* Botón base de exportar */
+.adm-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border: 1.5px solid transparent;
+}
+.adm-export-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Variante primaria — violeta sólido */
+.adm-export-btn-primary {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+.adm-export-btn-primary:not(:disabled):hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+}
+
+/* Variante outline — borde violeta */
+.adm-export-btn-outline {
+  background: #fff;
+  color: #7c3aed;
+  border-color: #c4b5fd;
+}
+.adm-export-btn-outline:not(:disabled):hover {
+  background: #f5f0ff;
+  border-color: #7c3aed;
+}
+
+/* Variante ghost — para cuando las ventas no están cargadas */
+.adm-export-btn-ghost {
+  background: #fafaf9;
+  color: #aaa;
+  border-color: #e5e5e5;
+}
+.adm-export-btn-ghost:not(:disabled):hover {
+  background: #f5f0ff;
+  color: #7c3aed;
+  border-color: #c4b5fd;
+}
+
+/* Variante row — botón icono en cada fila de la tabla */
+.adm-export-btn-row {
+  padding: 4px 8px;
+  background: none;
+  color: #ccc;
+  border: none;
+  font-size: 0.88rem;
+}
+.adm-export-btn-row:not(:disabled):hover {
+  background: #f5f0ff;
+  color: #7c3aed;
+}
+
+/* Botón genérico sin variante explícita (usado en tabla de eventos) */
+.adm-export-btn:not(.adm-export-btn-primary):not(.adm-export-btn-outline):not(.adm-export-btn-ghost):not(.adm-export-btn-row) {
+  background: #f5f0ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+.adm-export-btn:not(.adm-export-btn-primary):not(.adm-export-btn-outline):not(.adm-export-btn-ghost):not(.adm-export-btn-row):not(:disabled):hover {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+/* Spinner de carga dentro del botón */
+.adm-export-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: adm-spin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+@keyframes adm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* En móvil ocultar el select de eventos y apilar controles */
+@media (max-width: 900px) {
+  .adm-sales-header-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .adm-event-select { max-width: 100%; }
+}
+/* Estilos para botones de previsualización (Ver) */
+.adm-preview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1.5px solid #bbf7d0;
+}
+
+.adm-preview-btn:not(:disabled):hover {
+  background: #dcfce7;
+  border-color: #86efac;
+  transform: translateY(-1px);
+}
+
+.adm-preview-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.adm-preview-btn-outline {
+  background: #fff;
+  color: #7c3aed;
+  border-color: #c4b5fd;
+}
+
+.adm-preview-btn-outline:not(:disabled):hover {
+  background: #f5f0ff;
+  border-color: #7c3aed;
+}
+
+/* Botones pequeños para filas */
+.adm-preview-btn-row {
+  padding: 4px 8px;
+  background: none;
+  color: #16a34a;
+  border: none;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 6px;
+}
+
+.adm-preview-btn-row:not(:disabled):hover {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.adm-preview-btn-row:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* Botón para crear nuevo evento - ubicado en la cabecera de la tabla de eventos */
+.adm-create-event-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Efecto hover del botón */
+.adm-create-event-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+/* Icono dentro del botón */
+.adm-create-event-btn i {
+  font-size: 0.9rem;
+}
