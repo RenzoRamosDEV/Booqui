@@ -2,6 +2,10 @@
 
 Sistema de gestión de reservas de eventos desarrollado con arquitectura de microservicios, que permite a los usuarios explorar eventos, realizar reservas y gestionar pagos de manera eficiente.
 
+## REPOSIORIO ORIGINAL
+
+https://gitlab.com/booqui
+
 ## Descripción del Proyecto
 
 Booqi es una plataforma completa para la gestión de eventos y reservas que facilita la compra de entradas para diversos tipos de eventos. El sistema está diseñado con una arquitectura de microservicios independientes que se comunican entre sí, garantizando escalabilidad, mantenibilidad y alta disponibilidad.
