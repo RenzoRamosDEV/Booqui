@@ -2,7 +2,7 @@
 
 Sistema de gestión de reservas de eventos desarrollado con arquitectura de microservicios, que permite a los usuarios explorar eventos, realizar reservas y gestionar pagos de manera eficiente.
 
-## REPOSIORIO ORIGINAL
+## REPOSITORIO ORIGINAL
 
 https://gitlab.com/booqui
 
